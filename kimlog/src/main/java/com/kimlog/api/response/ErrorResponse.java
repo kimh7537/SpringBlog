@@ -11,7 +11,7 @@ import java.util.Map;
  *     "code": "400",
  *     "message": "잘못된 요청입니다.",
  *     "validation":{
- *         "title": "값을 입력해주세요"
+ *         "title": 값을 입력해주세요
  *     }
  * }
  */

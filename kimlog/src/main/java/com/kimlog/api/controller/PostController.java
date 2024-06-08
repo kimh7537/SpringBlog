@@ -15,15 +15,15 @@ import java.util.Map;
 @RestController
 public class PostController {
 
-    //SSR -> JPS, thymeleaf, mustache, freemarker
+    //SSR -> JSP, thymeleaf, mustache, freemarker
     //SPQ ->
     //     vue -> vue + SSR = nuxt
     //     react -> react + SSR = next
 
     @PostMapping("/posts")
-    public Map<String, String> get(@RequestBody @Valid PostCreate params){
+    public Map<String, String> get(@RequestBody @Valid PostCreate request){
 
-        return Map.of();
+        return Map.of(request.getTitle(), request.getContent());
     }
 
 
