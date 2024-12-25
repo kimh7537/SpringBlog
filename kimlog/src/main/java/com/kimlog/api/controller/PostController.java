@@ -1,30 +1,51 @@
 package com.kimlog.api.controller;
 
 import com.kimlog.api.request.PostCreate;
+import com.kimlog.api.request.PostEdit;
+import com.kimlog.api.request.PostSearch;
+import com.kimlog.api.response.PostResponse;
+import com.kimlog.api.service.PostService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class PostController {
 
-    //SSR -> JSP, thymeleaf, mustache, freemarker
-    //SPQ ->
-    //     vue -> vue + SSR = nuxt
-    //     react -> react + SSR = next
+    private final PostService postService;
 
     @PostMapping("/posts")
-    public Map<String, String> get(@RequestBody @Valid PostCreate request){
-
-        return Map.of(request.getTitle(), request.getContent());
+    public void post(@RequestBody @Valid PostCreate request) {
+        request.validate();
+        postService.write(request);
     }
 
+    @GetMapping("/posts/{postId}")
+    public PostResponse get(@PathVariable Long postId) {
+        return postService.get(postId);
+    }
 
+    @GetMapping("/posts")
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
+    }
 }
+
+
+
