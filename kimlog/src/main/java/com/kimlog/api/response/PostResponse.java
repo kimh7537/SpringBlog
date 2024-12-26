@@ -14,7 +14,7 @@ public class PostResponse {
     private final String title;
     private final String content;
 
-    // 생성자 오버로딩
+    // 생성자 오버로딩 : 같은 이름의 메서드를 여러 개 정의
     public PostResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();

@@ -17,9 +17,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public List<Post> getList(PostSearch postSearch) {
         return jpaQueryFactory.selectFrom(post)
-                .limit(postSearch.getSize())
-                .offset(postSearch.getOffset())
-                .orderBy(post.id.desc())
+                .limit(postSearch.getSize())  //가져올 데이터의 최대 갯수
+                .offset(postSearch.getOffset()) //건너뛸 데이터의 갯수
+                .orderBy(post.id.desc()) //id를 기준으로 내림차순 정렬
                 .fetch();
     }
 }
