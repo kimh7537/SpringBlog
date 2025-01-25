@@ -1,4 +1,4 @@
-package com.kimlog.api.request;
+package com.kimlog.api.request.post;
 
 import lombok.Builder;
 import lombok.Getter;

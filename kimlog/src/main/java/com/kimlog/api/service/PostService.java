@@ -3,10 +3,12 @@ package com.kimlog.api.service;
 import com.kimlog.api.domain.Post;
 import com.kimlog.api.domain.PostEditor;
 import com.kimlog.api.exception.PostNotFound;
-import com.kimlog.api.repository.PostRepository;
-import com.kimlog.api.request.PostCreate;
-import com.kimlog.api.request.PostEdit;
-import com.kimlog.api.request.PostSearch;
+import com.kimlog.api.exception.UserNotFound;
+import com.kimlog.api.repository.UserRepository;
+import com.kimlog.api.repository.post.PostRepository;
+import com.kimlog.api.request.post.PostCreate;
+import com.kimlog.api.request.post.PostEdit;
+import com.kimlog.api.request.post.PostSearch;
 import com.kimlog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
+    private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public void write(PostCreate postCreate) {
+    public void write(Long userId, PostCreate postCreate) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
         Post post = Post.builder()
+                .user(user)
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
                 .build();
@@ -70,6 +78,3 @@ public class PostService {
         postRepository.delete(post);
     }
 }
-
-
-

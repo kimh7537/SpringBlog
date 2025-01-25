@@ -18,5 +18,10 @@ spring:
         max-page-size: 2000
         default-page-size: 20
         one-indexed-parameters: true
+
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
 hodolman:
   jwt-key: "rTPmA9Sgk+Q1XwuJbG7E6xFFUhQpdi+al5iyPnRTK/Q="

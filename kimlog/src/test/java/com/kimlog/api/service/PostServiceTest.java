@@ -2,10 +2,10 @@ package com.kimlog.api.service;
 
 import com.kimlog.api.domain.Post;
 import com.kimlog.api.exception.PostNotFound;
-import com.kimlog.api.repository.PostRepository;
-import com.kimlog.api.request.PostCreate;
-import com.kimlog.api.request.PostEdit;
-import com.kimlog.api.request.PostSearch;
+import com.kimlog.api.repository.post.PostRepository;
+import com.kimlog.api.request.post.PostCreate;
+import com.kimlog.api.request.post.PostEdit;
+import com.kimlog.api.request.post.PostSearch;
 import com.kimlog.api.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

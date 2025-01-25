@@ -2,8 +2,8 @@ package com.kimlog.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kimlog.api.domain.Post;
-import com.kimlog.api.repository.PostRepository;
-import com.kimlog.api.request.PostCreate;
+import com.kimlog.api.repository.post.PostRepository;
+import com.kimlog.api.request.post.PostCreate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

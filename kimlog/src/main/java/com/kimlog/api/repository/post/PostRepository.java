@@ -1,4 +1,4 @@
-package com.kimlog.api.repository;
+package com.kimlog.api.repository.post;
 
 import com.kimlog.api.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
