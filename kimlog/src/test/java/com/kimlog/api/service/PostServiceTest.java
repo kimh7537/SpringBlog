@@ -1,11 +1,14 @@
 package com.kimlog.api.service;
 
 import com.kimlog.api.domain.Post;
+import com.kimlog.api.domain.User;
 import com.kimlog.api.exception.PostNotFound;
+import com.kimlog.api.repository.UserRepository;
 import com.kimlog.api.repository.post.PostRepository;
 import com.kimlog.api.request.post.PostCreate;
 import com.kimlog.api.request.post.PostEdit;
 import com.kimlog.api.request.post.PostSearch;
+import com.kimlog.api.response.PagingResponse;
 import com.kimlog.api.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,22 +31,33 @@ class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("글 작성")
     void test1() {
         // given
+        var user = User.builder()
+                .name("호돌맨")
+                .email("hodolman88@gmail.com")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+
         PostCreate postCreate = PostCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
 
         // when
-        postService.write(postCreate);
+        postService.write(user.getId(), postCreate);
 
         // then
         assertEquals(1L, postRepository.count());
@@ -90,11 +104,11 @@ class PostServiceTest {
                 .build();
 
         // when
-        List<PostResponse> posts = postService.getList(postSearch);
+        PagingResponse<PostResponse> posts = postService.getList(postSearch);
 
         // then
-        assertEquals(10L, posts.size());
-        assertEquals("foo19", posts.get(0).getTitle());
+        assertEquals(10L, posts.getSize());
+        assertEquals("foo19", posts.getItems().get(0).getTitle());
     }
 
     @Test
@@ -215,6 +229,7 @@ class PostServiceTest {
         });
     }
 }
+
 
 
 

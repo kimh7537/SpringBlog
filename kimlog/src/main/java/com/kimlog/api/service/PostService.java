@@ -9,14 +9,13 @@ import com.kimlog.api.repository.post.PostRepository;
 import com.kimlog.api.request.post.PostCreate;
 import com.kimlog.api.request.post.PostEdit;
 import com.kimlog.api.request.post.PostSearch;
+import com.kimlog.api.response.PagingResponse;
 import com.kimlog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -44,17 +43,13 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFound::new);
 
-        return PostResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
+        return new PostResponse(post);
     }
 
-    public List<PostResponse> getList(PostSearch postSearch) {
-        return postRepository.getList(postSearch).stream()
-                .map(PostResponse::new)
-                .collect(Collectors.toList());
+    public PagingResponse<PostResponse> getList(PostSearch postSearch) {
+        Page<Post> postPage = postRepository.getList(postSearch);
+        PagingResponse<PostResponse> postList = new PagingResponse<>(postPage, PostResponse.class);
+        return postList;
     }
 
     @Transactional

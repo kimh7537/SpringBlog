@@ -59,6 +59,13 @@ public class SecurityConfig {
                         .alwaysRemember(false)
                         .tokenValiditySeconds(2592000)
                 )
+                // 로그아웃 설정 추가
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
                 .csrf(AbstractHttpConfigurer::disable);
 
         http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -68,7 +75,7 @@ public class SecurityConfig {
 
     @Bean
     public EmailPasswordAuthFilter usernamePasswordAuthenticationFilter() {
-        EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
+        EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/api/auth/login", objectMapper);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));

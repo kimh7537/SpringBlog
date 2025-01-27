@@ -1,9 +1,7 @@
 package com.kimlog.api.service;
 
-import com.kimlog.api.crypto.PasswordEncoder;
 import com.kimlog.api.domain.User;
 import com.kimlog.api.exception.AlreadyExistsEmailException;
-import com.kimlog.api.exception.InvalidSigninInformation;
 import com.kimlog.api.repository.UserRepository;
 import com.kimlog.api.request.Signup;
 import org.junit.jupiter.api.AfterEach;
@@ -71,54 +69,4 @@ class AuthServiceTest {
         // expected
         assertThrows(AlreadyExistsEmailException.class, () -> authService.signup(signup));
     }
-
-//    @Test
-//    @DisplayName("로그인 성공")
-//    void test3() {
-//        // given
-//        PasswordEncoder encoder = new PasswordEncoder();
-//        String ecnryptedPassword = encoder.encrpyt("1234");
-//
-//        User user = User.builder()
-//                .email("hodolman88@gmail.com")
-//                .password(ecnryptedPassword)
-//                .name("짱돌맨")
-//                .build();
-//        userRepository.save(user);
-//
-//        Login login = Login.builder()
-//                .email("hodolman88@gmail.com")
-//                .password("1234")
-//                .build();
-//
-//        // when
-//        Long userId = authService.signin(login);
-//
-//        // then
-//        assertNotNull(userId);
-//    }
-//
-//    @Test
-//    @DisplayName("로그인시 비밀번호 틀림")
-//    void test4() {
-//        // given
-//        PasswordEncoder encoder = new PasswordEncoder();
-//        String ecnryptedPassword = encoder.encrpyt("1234");
-//
-//        User user = User.builder()
-//                .email("hodolman88@gmail.com")
-//                .password(ecnryptedPassword)
-//                .name("짱돌맨")
-//                .build();
-//        userRepository.save(user);
-//
-//        Login login = Login.builder()
-//                .email("hodolman88@gmail.com")
-//                .password("5678")
-//                .build();
-//
-//        // expected
-//        assertThrows(InvalidSigninInformation.class,
-//                () -> authService.signin(login));
-//    }
 }

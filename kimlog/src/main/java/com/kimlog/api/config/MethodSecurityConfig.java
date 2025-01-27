@@ -18,7 +18,7 @@ public class MethodSecurityConfig {
     @Bean
     public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
         var handler = new DefaultMethodSecurityExpressionHandler();
-        handler.setPermissionEvaluator(new HodologPermissionEvaluator(postRepository));
+        handler.setPermissionEvaluator(new KimlogPermissionEvaluator(postRepository));
         return handler;
     }
 }

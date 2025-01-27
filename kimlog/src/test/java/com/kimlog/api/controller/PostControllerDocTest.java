@@ -1,10 +1,13 @@
 package com.kimlog.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kimlog.api.config.KimlogMockUser;
 import com.kimlog.api.domain.Post;
+import com.kimlog.api.domain.User;
+import com.kimlog.api.repository.UserRepository;
 import com.kimlog.api.repository.post.PostRepository;
 import com.kimlog.api.request.post.PostCreate;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -22,7 +26,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,25 +42,37 @@ public class PostControllerDocTest {
     private PostRepository postRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
+    @AfterEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("글 단건 조회")
     void test1() throws Exception {
         // given
+        User user = User.builder()
+                .email("asd@asd.com")
+                .name("hodolman")
+                .password("123456")
+                .build();
+        userRepository.save(user);
+
         Post post = Post.builder()
+                .user(user)
                 .title("제목")
                 .content("내용")
                 .build();
         postRepository.save(post);
 
         // expected
-        mockMvc.perform(get("/posts/{postId}", 1L)
+        mockMvc.perform(get("/api/posts/{postId}", post.getId())
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -68,12 +83,14 @@ public class PostControllerDocTest {
                         responseFields(
                                 fieldWithPath("id").description("게시글 ID"),
                                 fieldWithPath("title").description("제목"),
-                                fieldWithPath("content").description("내용")
+                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("regDate").description("등록일")
                         )
                 ));
     }
 
     @Test
+    @KimlogMockUser
     @DisplayName("글 등록")
     void test2() throws Exception {
         // given
@@ -85,7 +102,7 @@ public class PostControllerDocTest {
         String json = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(post("/posts")
+        mockMvc.perform(post("/api/posts")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(json))

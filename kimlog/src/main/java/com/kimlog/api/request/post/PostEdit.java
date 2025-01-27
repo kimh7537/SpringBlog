@@ -23,3 +23,4 @@ public class PostEdit {
         this.content = content;
     }
 }
+

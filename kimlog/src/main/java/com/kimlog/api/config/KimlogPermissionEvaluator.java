@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Slf4j
 @RequiredArgsConstructor
-public class HodologPermissionEvaluator implements PermissionEvaluator {
+public class KimlogPermissionEvaluator implements PermissionEvaluator {
 
     private final PostRepository postRepository;
 
