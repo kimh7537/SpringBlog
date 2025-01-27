@@ -53,7 +53,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(e -> {
                     e.accessDeniedHandler(new Http403Handler(objectMapper));
-                    e.authenticationEntryPoint(new Http401Handler(objectMapper));
+                    e.authenticationEntryPoint(new Http401Handler(objectMapper)); //인증되지 않은 상태의 접근 오류 해결
                 })
                 .rememberMe(rm -> rm.rememberMeParameter("remember")
                         .alwaysRemember(false)
@@ -78,7 +78,7 @@ public class SecurityConfig {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/api/auth/login", objectMapper);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
-        filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
+        filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper)); //로그인 시도 실패 핸들러
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
